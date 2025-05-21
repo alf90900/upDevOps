@@ -25,7 +25,15 @@ jobs:
         run: docker build -t my-app:test .
 
       - name: Run Docker container
-        run: docker run -d -p 3002:3000 --name my-app-test my-app:test
+        run:  |
+          $container = docker ps -a --format '{{.Names}}' | Select-String -Pattern 'my-app-test'
+          if ($container) {
+            docker stop my-app-test
+            docker rm my-app-test
+            }
+          else{
+            Write-Host "No existe el contenedor"
+          }docker run -d -p 3002:3000 --name my-app-test my-app:test
 
       - name: Run unit tests
         run: npm test
