@@ -24,8 +24,7 @@ jobs:
       - name: Stop and remove existing container (if any)
         shell: pwsh
         run: |
-          $container = docker ps -a --format '{{.Names}}' | Select-String -Pattern 'my-app-develop'
-          if (${container}) {
+          if (my-app-develop) {
             docker stop my-app-develop
             docker rm my-app-develop
          } else {
