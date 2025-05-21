@@ -21,6 +21,15 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 0  # importante para permitir merge
 
+      - name: Stop and remove existing container (if any)
+        run: |
+          if docker ps -a --format '{{.Names}}' | findstr my-app-develop; then
+            docker stop my-app-develop
+            docker rm my-app-develop
+          else
+            echo "No existing container to stop"
+          fi
+
       - name: Build Docker image
         run: docker build -t my-app:develop .
 
