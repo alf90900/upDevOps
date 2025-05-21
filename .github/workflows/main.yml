@@ -43,6 +43,9 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: docker push docker.io/${{ secrets.DOCKER_USERNAME }}/my-app:main
 
+      - name: Trigger deploy on Render
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
       - name: Configure Git
         run: |
           git config --global user.email "github-actions@github.com"
