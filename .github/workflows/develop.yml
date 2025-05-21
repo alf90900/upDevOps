@@ -1,0 +1,39 @@
+name: Develop Workflow
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-merge:
+    runs-on: [self-hosted, windows]
+
+    steps:
+      - name: Checkout develop branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Build Docker image
+        run: docker build -t my-app:develop .
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Merge develop into test with commit
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          git clone https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }} repo
+          cd repo
+
+          git checkout test
+          git merge origin/develop --no-ff -m "Auto-merge dev into test"
+          git push origin test
