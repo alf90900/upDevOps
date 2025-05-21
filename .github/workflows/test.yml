@@ -1,0 +1,51 @@
+name: Test Workflow
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  build-and-merge:
+    runs-on: [self-hosted, windows]
+
+    steps:
+      - name: Checkout test branch
+        uses: actions/checkout@v3
+        with:
+          ref: test
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0  # importante para permitir merge
+
+      - name: Build Docker image
+        run: docker build -t my-app:test .
+
+      - name: Run Docker container
+        run:  |
+          $container = docker ps -a --format '{{.Names}}' | Select-String -Pattern 'my-app-test'
+          if ($container) {
+            docker stop my-app-test
+            docker rm my-app-test
+            }
+          else{
+            Write-Host "No existe el contenedor"
+          }docker run -d -p 3002:3000 --name my-app-test my-app:test
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Merge test into main
+        run: |
+          git fetch origin
+          git checkout main
+          git merge origin/test --no-ff -m "Auto-merge test into main"
+          git push origin main

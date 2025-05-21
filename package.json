@@ -1,0 +1,16 @@
+{
+  "name": "devOpsUP",
+  "version": "1.0.0",
+  "description": "",
+  "main": "apis.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "test": "node --test tests/primer.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+
