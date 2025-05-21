@@ -21,6 +21,12 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 0  # importante para permitir merge
 
+      - name: Build Docker image
+        run: docker build -t my-app:develop .
+
+      - name: Run Docker container
+        run: docker run -d -p 3001:3000 --name my-app-develop my-app:develop
+
       - name: Configure Git
         run: |
           git config --global user.email "github-actions@github.com"
