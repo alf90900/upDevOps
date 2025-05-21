@@ -19,7 +19,7 @@ function isEmptyObject(obj) {
 
 let productos = [ 
 
-    {id: 1, title:"Heladera con freezer patrick 87458AB", category_id:"Electrodomesticos", price: 80, currency: "ARS", condition: "new", stock_available: 3, warranty:{apply: true, value_name: "5 meses"}, description:{ability: "275 l", cooling_type: "ciclica", height: "180cm"} },
+    {id: 851, title:"Heladera con freezer patrick 87458AB", category_id:"Electrodomesticos", price: 80, currency: "ARS", condition: "new", stock_available: 3, warranty:{apply: true, value_name: "5 meses"}, description:{ability: "275 l", cooling_type: "ciclica", height: "180cm"} },
     {id: 2, title:"Heladera no frost Electrolux DFN3500", category_id:"Electrodomesticos", price: 140, currency: "ARS", condition: "new", stock_available: 7, warranty:{apply: false, value_name: "null"}, description:{ability: "374 l", cooling_type: "ciclica", height: "180cm"} },
     {id: 3, title:"Heladera minibar Vondom RFG40B", category_id:"Electrodomesticos", price: 50, currency: "ARS", condition: "new", stock_available: 5, warranty:{apply: true, value_name: "5 meses"}, description:{ability: "275 l", cooling_type: "ciclica", height: "180cm"} },
     {id: 4, title:"Heladera no frost Philco PHSB530XT", category_id:"Electrodomesticos", price: 50, currency: "ARS", condition: "new", stock_available: 20, warranty:{apply: true, value_name: "5 meses"}, description:{ability: "275 l", cooling_type: "ciclica", height: "180cm"} },
