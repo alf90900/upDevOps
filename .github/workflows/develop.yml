@@ -14,10 +14,10 @@ jobs:
     runs-on: [self-hosted, windows]
 
     steps:
-      - name: Checkout test branch
+      - name: Checkout develop branch
         uses: actions/checkout@v3
         with:
-          ref: test
+          ref: develop
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 0  # importante para permitir merge
 
