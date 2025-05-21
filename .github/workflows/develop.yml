@@ -43,6 +43,7 @@ jobs:
 
       - name: Merge develop into test
         run: |
-          git fetch origin develop
+          git fetch origin
+          git checkout test
           git merge origin/develop --no-ff -m "Auto-merge develop into test"
           git push origin test

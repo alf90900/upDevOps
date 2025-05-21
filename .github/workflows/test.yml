@@ -35,8 +35,9 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
 
-      - name: Merge develop into test
+      - name: Merge test into main
         run: |
-          git fetch origin test
+          git fetch origin
+          git checkout main
           git merge origin/test --no-ff -m "Auto-merge test into main"
           git push origin main
