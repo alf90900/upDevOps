@@ -1,0 +1,33 @@
+name: Develop Workflow
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-merge:
+    runs-on: [self-hosted, windows]
+
+    steps:
+      - name: Checkout test branch
+        uses: actions/checkout@v3
+        with:
+          ref: test
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0  # importante para permitir merge
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Merge develop into test
+        run: |
+          git fetch origin develop
+          git merge origin/develop --no-ff -m "Auto-merge develop into test"
+          git push origin test
