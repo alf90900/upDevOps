@@ -25,7 +25,16 @@ jobs:
         run: docker build -t my-app:develop .
 
       - name: Run Docker container
-        run: docker run -d -p 3001:3000 --name my-app-develop my-app:develop
+        run: |
+          $container = docker ps -a --format '{{.Names}}' | Select-String -Pattern 'my-app-develop'
+          if ($container) {
+            docker stop my-app-develop
+            docker rm my-app-develop
+            }
+          else{
+            Write-Host "No existe el contenedor"
+          }
+          docker run -d -p 3001:3000 --name my-app-develop my-app:develop
 
       - name: Configure Git
         run: |
