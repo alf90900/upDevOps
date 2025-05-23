@@ -34,7 +34,10 @@ jobs:
           else{
             Write-Host "No existe el contenedor"
           }
-          docker run -d -p 3001:3000 --name my-app-develop my-app:develop
+           docker run -d -p 3001:3000 --name my-app-develop `
+            -e NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} `
+            -e NEW_RELIC_APP_NAME="API - Products - DEVOPS" `
+            my-app:develop
 
       - name: Configure Git
         run: |
