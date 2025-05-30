@@ -48,7 +48,7 @@ describe("TEST: ", () =>{
         })
         
         it("GET product by ID", (t, done) => {
-            const productId = 1 // Asegurate de que exista en tu array de productos
+            const productId = 5 // Asegurate de que exista en tu array de productos
         
             const options = {
                 method: 'GET',
