@@ -13,7 +13,7 @@ describe("TEST: ", () =>{
             const options = {
                 method: 'GET',
                 hostname: 'localhost',
-                port: 3000,
+                port: 3002,
                 path: '/api/v1/productos',
             }
 
@@ -53,7 +53,7 @@ describe("TEST: ", () =>{
             const options = {
                 method: 'GET',
                 hostname: 'localhost',
-                port: 3000,
+                port: 3002,
                 path: `/api/v1/productos/${productId}`
             }
         
@@ -94,7 +94,7 @@ describe("TEST: ", () =>{
             const options = {
                 method: 'GET',
                 hostname: 'localhost',
-                port: 3000,
+                port: 3002,
                 path: `/api/v1/productos/${productId}`
             }
         
