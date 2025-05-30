@@ -1,5 +1,4 @@
 
-
 const { json, request } = require('express')
 const index = require('express')
 
@@ -40,7 +39,7 @@ let productos = [
 app.use(index.json()); // transforma body en json
 
 app.use((req, res, next)=> {
-    console.log(req.method);
+    //console.log(req.method);
     next();
   });
 
