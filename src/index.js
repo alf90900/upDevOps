@@ -1,4 +1,4 @@
-require('newrelic')
+
 const { json, request } = require('express')
 const index = require('express')
 
