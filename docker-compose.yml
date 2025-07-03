@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   app:
     build:
@@ -8,4 +6,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      - NEW_RELIC_LICENSE_KEY="CDBDACAFA02D255E810E9227DD4206BE1666AAD13ACBEAA5FE5A9EDED60711FA"
