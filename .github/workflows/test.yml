@@ -34,9 +34,6 @@ jobs:
           else{
             Write-Host "No existe el contenedor"
           }
-          docker run -d -p 3002:3000 --name my-app-test `
-            -e NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} `
-            my-app:test
 
       - name: Run unit tests
         run: npm test
