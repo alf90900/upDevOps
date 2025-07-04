@@ -4,7 +4,7 @@ const assert = require('node:assert/strict')
 const http = require('http')
 
 
-const BASE_URL = 'http://localhost:3002'
+const BASE_URL = 'http://localhost:3001'
 
 describe("TEST: ", () =>{
     describe("GET Test: ", () =>{
