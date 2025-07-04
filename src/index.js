@@ -1,7 +1,9 @@
 require('newrelic');
 
+
 const express = require('express')
 const app = express()
+
 
 function isEmptyObject(obj) {
     for (var property in obj) {
