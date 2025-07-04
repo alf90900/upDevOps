@@ -1,7 +1,9 @@
 require('newrelic');
 
+
 const express = require('express')
 const app = express()
+
 
 function isEmptyObject(obj) {
     for (var property in obj) {
@@ -38,7 +40,7 @@ let productos = [
 app.use(express.json()); // transforma body en json
 
 app.use((req, res, next)=> {
-    console.log(req.method);
+    //console.log(req.method);
     next();
   });
 

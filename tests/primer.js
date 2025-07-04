@@ -4,7 +4,7 @@ const assert = require('node:assert/strict')
 const http = require('http')
 
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = 'http://localhost:3002'
 
 describe("TEST: ", () =>{
     describe("GET Test: ", () =>{
@@ -13,7 +13,7 @@ describe("TEST: ", () =>{
             const options = {
                 method: 'GET',
                 hostname: 'localhost',
-                port: 3000,
+                port: 3002,
                 path: '/api/v1/productos',
             }
 
@@ -48,12 +48,12 @@ describe("TEST: ", () =>{
         })
         
         it("GET product by ID", (t, done) => {
-            const productId = 1 // Asegurate de que exista en tu array de productos
+            const productId = 5 // Asegurate de que exista en tu array de productos
         
             const options = {
                 method: 'GET',
                 hostname: 'localhost',
-                port: 3000,
+                port: 3002,
                 path: `/api/v1/productos/${productId}`
             }
         
@@ -94,7 +94,7 @@ describe("TEST: ", () =>{
             const options = {
                 method: 'GET',
                 hostname: 'localhost',
-                port: 3000,
+                port: 3002,
                 path: `/api/v1/productos/${productId}`
             }
         
