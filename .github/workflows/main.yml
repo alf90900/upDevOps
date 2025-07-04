@@ -29,7 +29,10 @@ jobs:
             }
           else{
             Write-Host "No existe el contenedor"
-          }docker run -d -p 3000:3000 --name my-app-main my-app:main
+          }
+          docker run -d -p 3000:3000 --name my-app-main `
+            -e NEW_RELIC_LICENSE_KEY=${{ secrets.NEW_RELIC_LICENSE_KEY }} `
+            my-app:main
           
       - name: Login to Docker Hub
         run: echo $env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin

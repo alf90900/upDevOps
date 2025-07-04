@@ -49,7 +49,6 @@ app.use((req, res, next)=> {
 //Endpoints middlewares
 
 app.get('/api/v1/productos', (req, res) => {
-    const newrelic = require('newrelic');
 
     try {
         if (!productos || !Array.isArray(productos)) {
@@ -89,7 +88,6 @@ app.get('/api/v1/productos', (req, res) => {
 
 
 app.get('/api/v1/productos/:id', (req, res) => {
-    const newrelic = require('newrelic');
 
     try {
         const productId = req.params.id;
@@ -135,7 +133,6 @@ app.get('/api/v1/productos/:id', (req, res) => {
 
 
 app.post('/api/v1/productos', (req, res) => {
-    const newrelic = require('newrelic');
 
     try {
         const {
@@ -208,7 +205,6 @@ app.post('/api/v1/productos', (req, res) => {
 
 
 app.delete('/api/v1/productos/:id', (req, res) => {
-    const newrelic = require('newrelic');
 
     try {
         const productId = req.params.id;
@@ -258,7 +254,6 @@ app.delete('/api/v1/productos/:id', (req, res) => {
 
 
 app.patch('/api/v1/productos/:id', (req, res) => {
-    const newrelic = require('newrelic');
     
     try {
         const productId = req.params.id;
