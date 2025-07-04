@@ -1,4 +1,8 @@
-'use strict'
+'use strict';
+
+console.log('newrelic.js cargado correctamente');
+console.log('License key:', process.env.NEW_RELIC_LICENSE_KEY);
+
 
 exports.config = {
   app_name: ['APIS UP-devOps'],
@@ -10,3 +14,4 @@ exports.config = {
     enabled: true
   }
 }
+
