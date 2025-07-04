@@ -1,12 +1,12 @@
 'use strict'
 
 exports.config = {
-  app_name: ['up-devOps'],
-  license_key: 'CDBDACAFA02D255E810E9227DD4206BE1666AAD13ACBEAA5FE5A9EDED60711FA',
+  app_name: ['APIS UP-devOps'],
+  license_key: process.env.NEW_RELIC_LICENSE_KEY,
   logging: {
-    level: 'info',
+    level: 'info'
   },
   distributed_tracing: {
-    enabled: true,
-  },
+    enabled: true
+  }
 }
