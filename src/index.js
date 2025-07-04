@@ -48,48 +48,84 @@ app.use((req, res, next)=> {
 
 //Endpoints middlewares
 
-app.get('/api/v1/productos', (request, response) => {
+app.get('/api/v1/productos', (req, res) => {
+    const newrelic = require('newrelic');
+
     try {
         if (!productos || !Array.isArray(productos)) {
-            return response.status(500).json({
+            // Evento: Error al obtener lista
+            newrelic.recordCustomEvent('ListaProductosFallida', {
+                motivo: 'Array productos no válido',
+                estado: 'Error'
+            });
+
+            return res.status(500).json({
                 status: 'error',
                 message: 'No se pudo obtener la lista de productos',
-            })
+            });
         }
 
-        response.status(200).json({
+        // Evento: Lista obtenida correctamente
+        newrelic.recordCustomEvent('ListaProductosConsultada', {
+            cantidad: productos.length,
+            estado: 'Exito'
+        });
+
+        return res.status(200).json({
             status: 'success',
             message: 'Lista de productos obtenida correctamente',
             data: productos
-        })
+        });
+
     } catch (error) {
-        //console.error('Error al obtener productos:', error)
-        response.status(500).json({
+        newrelic.noticeError(error);
+
+        return res.status(500).json({
             status: 'error',
             message: 'Ocurrió un error inesperado al obtener los productos'
-        })
+        });
     }
-})
+});
 
-app.get('/api/v1/productos/:id', (request, response) => {
+
+app.get('/api/v1/productos/:id', (req, res) => {
+    const newrelic = require('newrelic');
+
     try {
-        const productId = request.params.id;
+        const productId = req.params.id;
         const prod = productos.find(producto => producto.id == productId);
 
         if (!prod) {
-            return response.status(404).json({
+            // Evento: Producto no encontrado
+            newrelic.recordCustomEvent('ProductoBusquedaFallida', {
+                productoId: productId,
+                estado: 'NoEncontrado'
+            });
+
+            return res.status(404).json({
                 status: 'error',
                 message: `Producto con ID ${productId} no encontrado`
             });
         }
 
-        response.status(200).json({
+        // Evento: Producto encontrado correctamente
+        newrelic.recordCustomEvent('ProductoConsultado', {
+            productoId: productId,
+            nombre: prod.title || null,
+            categoria: prod.category_id || null,
+            estado: 'Encontrado'
+        });
+
+        return res.status(200).json({
             status: 'success',
             message: 'Producto encontrado',
             data: prod
         });
+
     } catch (error) {
-        response.status(500).json({
+        newrelic.noticeError(error);
+
+        return res.status(500).json({
             status: 'error',
             message: 'Ocurrió un error inesperado al buscar el producto'
         });
@@ -98,7 +134,9 @@ app.get('/api/v1/productos/:id', (request, response) => {
 
 
 
-app.post('/api/v1/productos', (request, response) => {
+app.post('/api/v1/productos', (req, res) => {
+    const newrelic = require('newrelic');
+
     try {
         const {
             title,
@@ -109,18 +147,24 @@ app.post('/api/v1/productos', (request, response) => {
             stock_available,
             warranty,
             description
-        } = request.body
+        } = req.body;
 
         // Validación básica de campos obligatorios
         if (!title || !category_id || !price || !currency || !condition || stock_available == null) {
-            return response.status(400).json({
+            newrelic.recordCustomEvent('ProductoCreacionFallida', {
+                motivo: 'Campos obligatorios faltantes',
+                ruta: '/api/v1/productos',
+                estado: 'Error'
+            });
+
+            return res.status(400).json({
                 status: 'error',
                 message: 'Faltan campos obligatorios en el cuerpo de la solicitud'
-            })
+            });
         }
 
         // Generar ID automáticamente
-        const newId = productos.length ? Math.max(...productos.map(p => p.id)) + 1 : 1
+        const newId = productos.length ? Math.max(...productos.map(p => p.id)) + 1 : 1;
 
         const nuevoProducto = {
             id: newId,
@@ -132,99 +176,148 @@ app.post('/api/v1/productos', (request, response) => {
             stock_available,
             warranty: warranty || { apply: false, value_name: null },
             description: description || {}
-        }
+        };
 
-        productos.push(nuevoProducto)
+        productos.push(nuevoProducto);
 
-        response.status(201).json({
+        // Evento personalizado: producto creado correctamente
+        newrelic.recordCustomEvent('ProductoCreado', {
+            productoId: newId,
+            title,
+            category_id,
+            price,
+            estado: 'Creado'
+        });
+
+        return res.status(201).json({
             status: 'success',
             message: 'Producto creado exitosamente',
             data: nuevoProducto
-        })
+        });
 
     } catch (error) {
-        console.error('Error al crear producto:', error);
-        response.status(500).json({
+        newrelic.noticeError(error);
+
+        return res.status(500).json({
             status: 'error',
             message: 'Ocurrió un error al intentar crear el producto'
-        })
+        });
     }
-})
+});
 
 
-app.delete('/api/v1/productos/:id', (request, response) => {
+
+app.delete('/api/v1/productos/:id', (req, res) => {
+    const newrelic = require('newrelic');
+
     try {
-        const productId = request.params.id
-        const productoIndex = productos.findIndex(producto => producto.id == productId)
+        const productId = req.params.id;
+        const productoIndex = productos.findIndex(producto => producto.id == productId);
 
         if (productoIndex === -1) {
-            return response.status(404).json({
+            // Evento: Producto no encontrado para eliminar
+            newrelic.recordCustomEvent('EliminarProductoFallido', {
+                productoId: productId,
+                estado: 'NoEncontrado'
+            });
+
+            return res.status(404).json({
                 status: 'error',
                 message: `Producto con ID ${productId} no encontrado`
-            })
+            });
         }
 
-        const productoEliminado = productos[productoIndex]
+        const productoEliminado = productos[productoIndex];
 
         // Eliminar el producto del array
-        productos.splice(productoIndex, 1)
+        productos.splice(productoIndex, 1);
 
-        response.status(200).json({
+        // Evento: Producto eliminado correctamente
+        newrelic.recordCustomEvent('ProductoEliminado', {
+            productoId: productId,
+            nombre: productoEliminado.name || null,
+            estado: 'Eliminado'
+        });
+
+        return res.status(200).json({
             status: 'success',
             message: 'Producto eliminado correctamente',
             data: productoEliminado
-        })
+        });
 
     } catch (error) {
-        console.error('Error al eliminar producto:', error)
-        response.status(500).json({
+        newrelic.noticeError(error);
+
+        return res.status(500).json({
             status: 'error',
             message: 'Ocurrió un error inesperado al intentar eliminar el producto'
-        })
+        });
     }
-})
+});
 
 
-app.patch('/api/v1/productos/:id', (request, response) => {
+
+app.patch('/api/v1/productos/:id', (req, res) => {
+    const newrelic = require('newrelic');
+    
     try {
-        const productId = request.params.id
-        const producto = productos.find(producto => producto.id == productId)
+        const productId = req.params.id;
+        const producto = productos.find(producto => producto.id == productId);
 
         if (!producto) {
-            return response.status(404).json({
+            // Evento: Producto no encontrado
+            newrelic.recordCustomEvent('ProductoNoEncontrado', {
+                ruta: '/api/v1/productos/:id',
+                productoId: productId,
+                estado: 'NoEncontrado'
+            });
+
+            return res.status(404).json({
                 status: 'error',
                 message: `Producto con ID ${productId} no encontrado`
-            })
+            });
         }
 
-        const nuevoStock = request.body.stock_available
+        const nuevoStock = req.body.stock_available;
 
         if (nuevoStock == null || typeof nuevoStock !== 'number') {
-            return response.status(400).json({
+            // Evento: Stock inválido
+            newrelic.recordCustomEvent('StockInvalido', {
+                productoId: productId,
+                stock: nuevoStock,
+                estado: 'Invalido'
+            });
+
+            return res.status(400).json({
                 status: 'error',
                 message: 'El campo "stock_available" es obligatorio y debe ser un número'
-            })
+            });
         }
 
-        producto.stock_available = nuevoStock
+        producto.stock_available = nuevoStock;
 
-        response.status(200).json({
+        // Evento: Actualización exitosa
+        newrelic.recordCustomEvent('StockActualizado', {
+            productoId: productId,
+            nuevoStock,
+            estado: 'Actualizado'
+        });
+
+        return res.status(200).json({
             status: 'success',
             message: 'Stock actualizado correctamente',
             data: producto
-        })
+        });
 
     } catch (error) {
-        //console.error('Error al actualizar stock:', error)
-        response.status(500).json({
+        newrelic.noticeError(error);
+
+        return res.status(500).json({
             status: 'error',
             message: 'Ocurrió un error al intentar actualizar el stock'
-        })
+        });
     }
-})
-
-
-
+});
 
 
 
