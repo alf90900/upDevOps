@@ -42,8 +42,10 @@ jobs:
           git config --global user.name "GitHub Actions"
 
       - name: Merge develop into test
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git fetch origin
           git checkout test
           git merge origin/develop --no-ff -m "Auto-merge develop into test"
-          git push origin test
+          git push https://x-access-token:${GH_PAT}@github.com/alf90900/upDevOps.git test

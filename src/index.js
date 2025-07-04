@@ -1,8 +1,7 @@
+require('newrelic');
 
-const { json, request } = require('express')
-const index = require('express')
-
-const app = index()
+const express = require('express')
+const app = express()
 
 function isEmptyObject(obj) {
     for (var property in obj) {
@@ -36,7 +35,7 @@ let productos = [
 
 //Declaro los middlewares
 
-app.use(index.json()); // transforma body en json
+app.use(express.json()); // transforma body en json
 
 app.use((req, res, next)=> {
     //console.log(req.method);
@@ -228,8 +227,7 @@ app.patch('/api/v1/productos/:id', (request, response) => {
 
 
 //Escucho puerto
-app.listen( port= 3000, hostname=() =>  {
-
-    console.log("running in port 3000...")
-
+app.listen(3000, () => {
+    console.log("Running on port 3000...")
 })
+
