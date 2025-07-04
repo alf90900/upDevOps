@@ -1,3 +1,4 @@
+console.log('NEW_RELIC_LICENSE_KEY:', process.env.NEW_RELIC_LICENSE_KEY);
 require('newrelic');
 
 const express = require('express')
